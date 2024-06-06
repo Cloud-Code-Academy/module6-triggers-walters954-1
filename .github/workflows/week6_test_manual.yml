@@ -41,3 +41,16 @@ jobs:
             - name: Run Apex Unit Tests
               run: |
                   sf apex run test -r human -c --wait 10 -o org -n TriggerTest
+
+            - name: Installing SFDX scanner
+              run: sf plugins install @salesforce/sfdx-scanner
+
+            - name: Scan code
+              run: |
+                sf scanner run --format sarif --target '../force-app' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.sarif'
+
+            - name: Upload SARIF file
+              uses: github/codeql-action/upload-sarif@v3
+              with:
+                  # Path to SARIF file relative to the root of the repository
+                  sarif_file: apexScanResults.sarif
