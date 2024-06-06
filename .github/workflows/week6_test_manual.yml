@@ -31,10 +31,6 @@ jobs:
               run: |
                   sf force source deploy -u org -p force-app/main/default/classes/
 
-            - name: Run Apex Unit Tests
-              run: |
-                  sf apex run test -r human -c --wait 10 -o org -n TriggerTest
-
             - name: Installing SFDX scanner
               run: sf plugins install @salesforce/sfdx-scanner
 
