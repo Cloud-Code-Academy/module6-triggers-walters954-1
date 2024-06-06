@@ -15,25 +15,6 @@ jobs:
               run: |
                   npm i @salesforce/cli --global
 
-            - name: Store SFDX Auth URL In File
-              run: | #sfdx force:org:display --verbose > Sfdx Auth URL
-                  echo force://PlatformCLI::5Aep861HDR3iASSXIWs9WrWtJAPy.cUeVt3Rahjx8v6KbqllY1K2vt8tXxzlZ81CNNaAiNMKh2WFAfvLx5yWpVf@brave-badger-305324-dev-ed.my.salesforce.com > sfdxauth.txt
-
-            - name: Add SFDX Org
-              run: |
-                  sf force auth sfdxurl store -f sfdxauth.txt -a org
-
-            - name: Deploy objects
-              run: |
-                  sf force source deploy -u org -p force-app/main/default/objects/
-
-            - name: Deploy classes to org
-              run: |
-                  sf force source deploy -u org -p force-app/main/default/classes/
-
-            - name: Installing SFDX scanner
-              run: sf plugins install @salesforce/sfdx-scanner
-
             - name: Scan code
               run: |
                 sf scanner run --format sarif --target '/force-app' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.sarif'
