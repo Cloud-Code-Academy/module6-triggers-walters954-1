@@ -1,43 +1,26 @@
 name: Week 6 Run Apex Unit Tests Manually
 
 on:
-    workflow_dispatch:
-        inputs:
-            sfdx_auth_url:
-                description: "SFDX Auth URL"
-                required: true
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
 
-            - name: Install sfdx with npm
-              run: |
-                  npm i @salesforce/cli --global
+      - name: Install sfdx with npm
+        run: |
+          npm i @salesforce/cli --global
 
-            - name: Store SFDX Auth URL In File
-              run: | #sfdx force:org:display --verbose > Sfdx Auth URL
-                  echo "${{ github.event.inputs.sfdx_auth_url }}" > sfdxauth.txt
+      - name: Scan code
+        run: |
+          sf scanner run --format sarif --target 'force-app/' --category "Design,Best Practices,Performance,Code Style,Error Prone" --outfile 'apexScanResults.sarif'
 
-            - name: Add SFDX Org
-              run: |
-                  sf force auth sfdxurl store -f sfdxauth.txt -a org
-
-            - name: Deploy objects
-              run: |
-                  sf force source deploy -u org -p force-app/main/default/objects/
-
-            - name: Deploy classes to org
-              run: |
-                  sf force source deploy -u org -p force-app/main/default/classes/
-
-            - name: Deploy triggers
-              run: |
-                  sf force source deploy -u org -p force-app/main/default/triggers/
-
-            - name: Run Apex Unit Tests
-              run: |
-                  sf apex run test -r human -c --wait 10 -o org -n TriggerTest
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: apexScanResults.sarif
