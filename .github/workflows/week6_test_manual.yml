@@ -17,7 +17,7 @@ jobs:
 
             - name: Store SFDX Auth URL In File
               run: | #sfdx force:org:display --verbose > Sfdx Auth URL
-                  echo "${{ github.event.inputs.sfdx_auth_url }}" > sfdxauth.txt
+                  echo force://PlatformCLI::5Aep861HDR3iASSXIWs9WrWtJAPy.cUeVt3Rahjx8v6KbqllY1K2vt8tXxzlZ81CNNaAiNMKh2WFAfvLx5yWpVf@brave-badger-305324-dev-ed.my.salesforce.com > sfdxauth.txt
 
             - name: Add SFDX Org
               run: |
