@@ -17,7 +17,7 @@ jobs:
 
       - name: Scan code
         run: |
-          sf scanner run --format sarif --target 'force-app/' --category "Design,Best Practices,Performance" --outfile 'apexScanResults.sarif'
+          sf scanner run --format sarif --target 'force-app/' --category "Design,Best Practices,Performance,Code Style,Error Prone" --outfile 'apexScanResults.sarif'
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v3
