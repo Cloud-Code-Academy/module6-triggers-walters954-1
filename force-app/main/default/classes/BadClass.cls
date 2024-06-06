@@ -7,7 +7,9 @@ public with sharing class BadClass {
 
     Integer x = 12;
     if (x > 10) {
-        
     }
+  }
+
+  public class fooClass {
   }
 }
